@@ -1,0 +1,8 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+# config/routes.yaml
+
+commandes_index:
+  path: /commandes
+  controller: App\Controller\CommandeController::index

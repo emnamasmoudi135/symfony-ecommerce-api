@@ -1,0 +1,107 @@
+{# templates/commande/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Commandes{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table-container table, th, td {
+            border: 1px solid #dee2e6;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #343a40;
+            color: white;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul li {
+            margin-bottom: 5px;
+        }
+
+        .table-container tbody tr:nth-child(odd) {
+            background-color: #f8f9fa; /* Alternating row color */
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="mb-4">Commandes</h1>
+
+        {% for commande in commandes %}
+            <div class="table-container">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th colspan="2">Order ID: {{ commande.getOrderID() }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>Amount</th>
+                        <td>{{ commande.getAmount() }}</td>
+                    </tr>
+                    <tr>
+                        <th>Currency</th>
+                        <td>{{ commande.getCurrency() }}</td>
+                    </tr>
+                    <tr>
+                        <th>Deliver To</th>
+                        <td>{{ commande.getDeliverTo() }}</td>
+                    </tr>
+                    <tr>
+                        <th>Order Number</th>
+                        <td>{{ commande.getOrderNumber() }}</td>
+                    </tr>
+                    <tr>
+                        <th>Sales Order Lines</th>
+                        <td>
+                            <ul>
+                                {% for saleOrderLine in commande.getSalesOrderLines() %}
+                                    <li>Amount: {{ saleOrderLine.getAmount() }}</li>
+                                    <li>Discount: {{ saleOrderLine.getDiscount() }}</li>
+                                    <li>Item: {{ saleOrderLine.getItem() }}</li>
+                                    <li>Item Description: {{ saleOrderLine.getItemDescription() }}</li>
+                                    <li>Quantity: {{ saleOrderLine.getQuantity() }}</li>
+                                    <li>Unit Code: {{ saleOrderLine.getUnitCode() }}</li>
+                                    <li>Unit Description: {{ saleOrderLine.getUnitDescription() }}</li>
+                                    <li>Unit Price: {{ saleOrderLine.getUnitPrice() }}</li>
+                                    <li>VAT Amount: {{ saleOrderLine.getVATAmount() }}</li>
+                                    <li>VAT Percentage: {{ saleOrderLine.getVATPercentage() }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

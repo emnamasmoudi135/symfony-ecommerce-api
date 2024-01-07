@@ -1,0 +1,33 @@
+{# templates/article/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Articles{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="mb-4">Articles</h1>
+
+        <table class="table table-bordered table-hover">
+            <thead style="background-color: black; color: white; font-weight: bold;">
+            <tr>
+                <th>Item</th>
+                <th>Item Description</th>
+                <th>Unit Code</th>
+                <th>Unit Description</th>
+                <th>Unit Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for article in articles %}
+                <tr>
+                    <td>{{ article.getItem() }}</td>
+                    <td>{{ article.getItemDescription() }}</td>
+                    <td>{{ article.getUnitCode() }}</td>
+                    <td>{{ article.getUnitDescription() }}</td>
+                    <td>{{ article.getUnitPrice() }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
