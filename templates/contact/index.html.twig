@@ -1,0 +1,100 @@
+{# templates/contact/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Contacts{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table-container table, th, td {
+            border: 1px solid #dee2e6;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #343a40;
+            color: white;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul li {
+            margin-bottom: 5px;
+        }
+
+        .table-container tbody tr:nth-child(odd) {
+            background-color: #f8f9fa; /* Alternating row color */
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="mb-4">Contacts</h1>
+
+        {% for contact in contacts %}
+            <div class="table-container">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th colspan="2">Contact ID: {{ contact.getId() }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>Account Name</th>
+                        <td>{{ contact.getAccountName() }}</td>
+                    </tr>
+                    <tr>
+                        <th>Address Line 1</th>
+                        <td>{{ contact.getAddressLine1() }}</td>
+                    </tr>
+                    <tr>
+                        <th>Address Line 2</th>
+                        <td>{{ contact.getAddressLine2() ?: 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <th>City</th>
+                        <td>{{ contact.getCity() }}</td>
+                    </tr>
+                    <tr>
+                        <th>Contact Name</th>
+                        <td>{{ contact.getContactName() }}</td>
+                    </tr>
+                    <tr>
+                        <th>Country</th>
+                        <td>{{ contact.getCountry() }}</td>
+                    </tr>
+                    <tr>
+                        <th>Zip Code</th>
+                        <td>{{ contact.getZipCode() }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,7 +36,6 @@ class Article
      */
     private $unitCode;
 
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -45,6 +46,21 @@ class Article
      */
     private $unitPrice;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Commande::class, mappedBy="articles")
+     */
+    private $commandes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=LigneCommande::class, mappedBy="article", orphanRemoval=true, cascade={"persist"})
+     */
+    private $lignesCommande;
+
+    public function __construct()
+    {
+        $this->commandes = new ArrayCollection();
+        $this->lignesCommande = new ArrayCollection(); // Correction ici
+    }
 
     public function getId(): ?int
     {
@@ -87,7 +103,6 @@ class Article
         return $this;
     }
 
-
     public function getUnitDescription(): ?string
     {
         return $this->unitDescription;
@@ -111,4 +126,70 @@ class Article
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    }
+
+    public function addCommande(Commande $commande): self
+    {
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes[] = $commande;
+            $commande->addArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): self
+    {
+        if ($this->commandes->removeElement($commande)) {
+            $commande->removeArticle($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LigneCommande>
+     */
+    public function getLignesCommande(): Collection
+    {
+        return $this->lignesCommande;
+    }
+
+    public function addLigneCommande(LigneCommande $ligneCommande): self
+    {
+        if (!$this->lignesCommande->contains($ligneCommande)) {
+            $this->lignesCommande[] = $ligneCommande;
+            $ligneCommande->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLigneCommande(LigneCommande $ligneCommande): self
+    {
+        if ($this->lignesCommande->removeElement($ligneCommande)) {
+            // set the owning side to null (unless already changed)
+            if ($ligneCommande->getArticle() === $this) {
+                $ligneCommande->setArticle(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+
+
+
+
+
+
 }

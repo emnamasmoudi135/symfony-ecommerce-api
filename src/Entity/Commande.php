@@ -49,9 +49,25 @@ class Commande
      */
     private $salesOrderLines;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Article::class, inversedBy="commandes")
+     * @ORM\JoinTable(name="lignes_commande",
+     *      joinColumns={@ORM\JoinColumn(name="commande_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="article_id", referencedColumnName="id")}
+     * )
+     */
+    private $articles;
+
+    /**
+     * @ORM\OneToMany(targetEntity=LigneCommande::class, mappedBy="commande", orphanRemoval=true, cascade={"persist"})
+     */
+    private $lignesCommande;
+
     public function __construct()
     {
         $this->salesOrderLines = new ArrayCollection();
+        $this->articles = new ArrayCollection();
+        $this->lignesCommande = new ArrayCollection(); // Correction ici
     }
 
     public function getId(): ?int
@@ -148,4 +164,66 @@ class Commande
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): self
+    {
+        $this->articles->removeElement($article);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LigneCommande>
+     */
+    public function getLignesCommande(): Collection
+    {
+        return $this->lignesCommande;
+    }
+
+    public function addLigneCommande(LigneCommande $ligneCommande): self
+    {
+        if (!$this->lignesCommande->contains($ligneCommande)) {
+            $this->lignesCommande[] = $ligneCommande;
+            $ligneCommande->setCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLigneCommande(LigneCommande $ligneCommande): self
+    {
+        if ($this->lignesCommande->removeElement($ligneCommande)) {
+            // set the owning side to null (unless already changed)
+            if ($ligneCommande->getCommande() === $this) {
+                $ligneCommande->setCommande(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+
+
+
+
+
 }
